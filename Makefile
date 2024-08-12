@@ -6,7 +6,7 @@
 #    By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 19:33:09 by hakaraka          #+#    #+#              #
-#    Updated: 2024/07/17 16:59:42 by lmoricon         ###   ########.fr        #
+#    Updated: 2024/08/12 21:41:35 by lmoricon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ LIBFT_DIR 	= libft
 LIBFT 		= libft/libft.a
 RM 			= rm -rf
 
-SRC = main.c
+SRC = main.c tokenizer.c utils_token.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -53,7 +53,7 @@ $(NAME): $(LIBFT) $(OBJ_DIR) $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@echo "Compiling $<..."
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c  $< -o $@
 
 $(LIBFT):
 	@echo "Compiling libft..."

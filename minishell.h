@@ -15,18 +15,55 @@
 # include <curses.h>         // Per alcune funzioni termcap
 # include <term.h>           // Per altre funzioni termcap
 
-// Inclusioni per readline
 # include <readline/readline.h>
 # include <readline/history.h>
-
+# include "libft/libft.h"
 // Definizioni di prototipi di funzione, se necessario
 // ...
 
-typedef struct t_command {
-    char    *cmd;
-    char    *arg;
-    int     infd;
-    int     outfd;
-}
 
-#endif // MINISHELL_H
+typedef enum{
+    TOKEN_WORD,         //  o comando o file ??
+    TOKEN_PIPE,         //      = |
+    TOKEN_REDIR_IN,     //     = >
+    TOKEN_REDIR_OUT,    //     = <
+    TOKEN_REDIR_APPEND, //  = >>
+    TOKEN_REDIR_PRE,    //     = <<
+    TOKEN_EOF,          // END OF FILE
+    TOKEN_AND,
+    TOKEN_OR,
+    TOKEN_DOLLAR,
+    TOKEN_OPEN_P,
+    TOKEN_CLOSE_P,
+    // Aggiungere altri tipi di token necessari
+} TokenType;
+
+typedef enum{
+    COM_NAME,
+    COM_ARGS,
+    FILE,
+} WordType;
+
+typedef struct s_token
+{
+    TokenType   type;
+    char        *value;
+} token;
+
+typedef struct s_token_list
+{
+    token   token;
+    struct s_token_list    *next;
+    struct s_token_list    *prev;
+}   t_token_list;
+
+/*TOKENIZER*/
+void    go_next(char **str);
+int space_until_next(char   *str);
+t_list    *tokenize(char   *str, t_list  *list);
+
+/*debug*/
+void    print_list(t_list *list);
+
+
+#endif

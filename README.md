@@ -1,5 +1,7 @@
 #MINISHELL
 
+STEP 1: Tokenizer:
+
 La tokenizzazione è un passo fondamentale nel processo di parsing e aiuta enormemente a semplificare l'analisi sintattica. Ecco una spiegazione più dettagliata:
 Cos'è la tokenizzazione:
 La tokenizzazione è il processo di suddividere una stringa di input (nel nostro caso, un comando Bash) in unità più piccole e significative chiamate "token". Ogni token rappresenta un elemento atomico del linguaggio, come una parola, un operatore, o un simbolo speciale.

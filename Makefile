@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+         #
+#    By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 19:33:09 by hakaraka          #+#    #+#              #
-#    Updated: 2024/08/12 21:41:35 by lmoricon         ###   ########.fr        #
+#    Updated: 2024/08/13 16:58:40 by mamerlin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ LIBFT_DIR 	= libft
 LIBFT 		= libft/libft.a
 RM 			= rm -rf
 
-SRC = main.c tokenizer.c utils_token.c
+SRC = main.c tokenizer.c utils_token.c parser.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
@@ -58,6 +58,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 $(LIBFT):
 	@echo "Compiling libft..."
 	@make bonus -C libft
+	@make -C libft
 
 clean:
 	@echo "Cleaning..."
@@ -68,6 +69,11 @@ fclean: clean
 	@echo "Fcleaning..."
 	$(RM) $(NAME)
 	$(RM) $(LIBFT)
+
+git:
+	git add .
+	git commit -m "update"
+	git push
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)

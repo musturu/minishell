@@ -31,7 +31,7 @@ void    read_input()
     {
         str = readline("MINISHELL$>:");
         add_history(str);
-        list = tokenize(str, list);
+        list = tokenize(str, &list);
         printf("uscito da tokenize\n");
         print_list(list);
     }

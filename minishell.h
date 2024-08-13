@@ -41,7 +41,7 @@ typedef enum{
 typedef enum{
     COM_NAME,
     COM_ARGS,
-    FILE,
+    FILE_WORD,
 } WordType;
 
 typedef struct s_token
@@ -60,7 +60,7 @@ typedef struct s_token_list
 /*TOKENIZER*/
 void    go_next(char **str);
 int space_until_next(char   *str);
-t_list    *tokenize(char   *str, t_list  *list);
+t_list    *tokenize(char   *str, t_list  **list);
 
 /*debug*/
 void    print_list(t_list *list);

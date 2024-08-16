@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/08/13 14:43:10 by lmoricon         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:52:12 by mamerlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 static TokenType   get_token_type(char *str)
 {
     if (!*str)
-        return (TOKEN_EOF);//input " "
+        return (TOKEN_EOF);
+    if (!ft_strncmp(str, "\"", 1))
+        return (TOKEN_DBQUOTE);
+    if (!ft_strncmp(str, "'", 1))
+        return (TOKEN_SQUOTE);
     if (!ft_strncmp(str, "|", 1))
         return (TOKEN_PIPE);
     if (!ft_strncmp(str, ">>", 2))
@@ -34,6 +38,8 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_OPEN_P);
     if (!ft_strncmp(str, ")", 1))
         return (TOKEN_CLOSE_P);
+    if (!ft_strncmp(str, " ", 1))
+        return (TOKEN_SPACE);
     else
         return (TOKEN_WORD);
 }
@@ -42,7 +48,7 @@ static char    *get_token_value(char   *str, TokenType type)
 {
     if (type == TOKEN_EOF)
         return (ft_strdup("EOF"));
-    if (type == TOKEN_PIPE || type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || type == TOKEN_AND || type == TOKEN_DOLLAR || type == TOKEN_CLOSE_P || type == TOKEN_OPEN_P)
+    if (type == TOKEN_PIPE || type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || type == TOKEN_AND || type == TOKEN_DOLLAR || type == TOKEN_DBQUOTE || type == TOKEN_SQUOTE|| type == TOKEN_CLOSE_P || type == TOKEN_OPEN_P || type == TOKEN_REDIR_APPEND || type == TOKEN_REDIR_PRE || type == TOKEN_SPACE)
         return (ft_substr(str, 0, 1));
     else if (type != TOKEN_WORD)
         return (ft_substr(str, 0, 2));
@@ -75,7 +81,6 @@ t_list    *tokenize(char   *str, t_list  **list)
             return (NULL);
         return (*list);
     }
-    go_next(&str);
     if (!append_token(&str, list))
         return (NULL);
     return (tokenize(str, list));

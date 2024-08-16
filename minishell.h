@@ -35,6 +35,9 @@ typedef enum{
     TOKEN_DOLLAR,
     TOKEN_OPEN_P,
     TOKEN_CLOSE_P,
+    TOKEN_DBQUOTE,
+    TOKEN_SQUOTE,
+    TOKEN_SPACE,
     // Aggiungere altri tipi di token necessari
 } TokenType;
 

@@ -6,7 +6,7 @@
 /*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/08/16 19:52:12 by mamerlin         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:45:23 by mamerlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_CLOSE_P);
     if (!ft_strncmp(str, " ", 1))
         return (TOKEN_SPACE);
+    if (!ft_strncmp(str, "\\", 1))
+        return (TOKEN_BACKSLASH);
     else
         return (TOKEN_WORD);
 }
@@ -69,9 +71,10 @@ static int append_token(char **str, t_list **lst)
         return (0);
     *str += ft_strlen(tok->value);
     ft_lstadd_back(lst, ft_lstnew(tok));
-    //print_list(lst);
     return (1);
 }
+
+
 
 t_list    *tokenize(char   *str, t_list  **list)
 {

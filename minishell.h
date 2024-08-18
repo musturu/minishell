@@ -22,7 +22,7 @@
 // ...
 
 
-typedef enum{
+typedef enum {
     TOKEN_WORD,         //  o comando o file ??
     TOKEN_PIPE,         //      = |
     TOKEN_REDIR_IN,     //     = >
@@ -37,24 +37,24 @@ typedef enum{
     TOKEN_CLOSE_P,
     TOKEN_DBQUOTE,
     TOKEN_SQUOTE,
+    TOKEN_BACKSLASH,
     TOKEN_SPACE,
-    // Aggiungere altri tipi di token necessari
-} TokenType;
-
-typedef enum{
     COM_NAME,
     COM_ARGS,
     FILE_WORD,
-} WordType;
+    TOKEN_DELETE,
+    // Aggiungere altri tipi di token necessari
+} TokenType;
 
-typedef struct s_token
-{
+
+typedef struct s_token {
+
     TokenType   type;
     char        *value;
 } token;
 
-typedef struct s_token_list
-{
+typedef struct s_token_list {
+
     token   token;
     struct s_token_list    *next;
     struct s_token_list    *prev;

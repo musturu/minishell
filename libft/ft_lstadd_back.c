@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoricon <lmoricon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:29:33 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/08/12 21:46:24 by lmoricon         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:13:25 by mamerlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	{
 		tem = ft_lstlast(*(lst));
 		tem -> next = new;
+		new -> prev = tem;
 	}
 	else
 		*lst = new;

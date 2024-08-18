@@ -1,0 +1,2 @@
+1) Se faccio freccia su ^ prende tutti i comandi precedenti in memoria e li riesegue
+

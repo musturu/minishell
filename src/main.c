@@ -34,9 +34,8 @@ void    read_input()
         list = tokenize(str, &list);
         printf("uscito da tokenize\n");
         print_list(list);
-        /*
         parser(list);
+        printf("uscito da parser\n");
         print_list(list);
-        */
     }
 }

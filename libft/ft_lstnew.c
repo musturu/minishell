@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmoricon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:56:15 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/01/14 19:21:26 by lmoricon         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:11:41 by mamerlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ t_list	*ft_lstnew(void *ncontent)
 		return (NULL);
 	res -> content = ncontent;
 	res -> next = NULL;
+	res -> prev = NULL;
 	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 17:39:39 by lmoricon          #+#    #+#             */
-/*   Updated: 2024/08/17 15:45:23 by mamerlin         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:07:22 by mamerlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_OPEN_P);
     if (!ft_strncmp(str, ")", 1))
         return (TOKEN_CLOSE_P);
-    if (!ft_strncmp(str, " ", 1))
-        return (TOKEN_SPACE);
+    // if (!ft_strncmp(str, " ", 1))
+    //     return (TOKEN_SPACE);
     if (!ft_strncmp(str, "\\", 1))
         return (TOKEN_BACKSLASH);
     else
@@ -50,12 +50,18 @@ static char    *get_token_value(char   *str, TokenType type)
 {
     if (type == TOKEN_EOF)
         return (ft_strdup("EOF"));
-    if (type == TOKEN_PIPE || type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || type == TOKEN_AND || type == TOKEN_DOLLAR || type == TOKEN_DBQUOTE || type == TOKEN_SQUOTE|| type == TOKEN_CLOSE_P || type == TOKEN_OPEN_P || type == TOKEN_REDIR_APPEND || type == TOKEN_REDIR_PRE || type == TOKEN_SPACE)
+    if (type == TOKEN_PIPE || type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || type == TOKEN_AND || type == TOKEN_DOLLAR || type == TOKEN_CLOSE_P || type == TOKEN_OPEN_P || type == TOKEN_REDIR_APPEND || type == TOKEN_REDIR_PRE || type == TOKEN_SPACE)
         return (ft_substr(str, 0, 1));
-    else if (type != TOKEN_WORD)
+    else if (type != TOKEN_WORD && type != TOKEN_DBQUOTE && type != TOKEN_SQUOTE)
         return (ft_substr(str, 0, 2));
-    else
+    else if (type == TOKEN_WORD)
         return (ft_substr(str, 0, space_until_next(str)));
+    else if (type == TOKEN_SQUOTE)
+        return (ft_substr(str, 0, (ft_strchr(str+1, '\'') - str) + 1));
+    else if (type == TOKEN_DBQUOTE)
+        return (ft_substr(str, 0, (ft_strchr(str+1, '\"') - str) + 1));
+    else
+        return NULL;
 }
 
 static int append_token(char **str, t_list **lst)
@@ -78,6 +84,7 @@ static int append_token(char **str, t_list **lst)
 
 t_list    *tokenize(char   *str, t_list  **list)
 {
+    go_next(&str);
     if (!*str)
     {
         if (!append_token(&str, list))

@@ -6,207 +6,71 @@
 /*   By: mamerlin <mamerlin@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 16:52:52 by mamerlin          #+#    #+#             */
-/*   Updated: 2024/08/19 02:58:05 by mamerlin         ###   ########.fr       */
+/*   Updated: 2024/08/20 19:07:07 by mamerlin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+// static int check_error(int i)
+// {
+// 	if (i == 0)
+// 	{
+// 		printf("Error");
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
-static int parse_dollar(void)
+
+cmd	*new_cmd(t_list **tokens)
 {
-	return (1);
-}
-
-static int check_error(int i)
-{
-	if (i == 0)
-	{
-		printf("Error");
-		return (1);
-	}
-	return (0);
-}
-
-
-static int parser_DBQ(t_list **list)
-{
+	cmd	*new;
 	token *tkn;
+	token *tknnext;
 
-	tkn = (*list)->content;
-	if (tkn->type == TOKEN_DOLLAR)
-		parse_dollar();
-	tkn->type = COM_ARGS;
-	(*list) = (*list)->next;
-	while (tkn->type != TOKEN_DBQUOTE)
+	new = malloc(sizeof(cmd));
+	if (!new)
+		return (NULL);
+	tkn = (*tokens)->content;
+	tknnext = (*tokens)->next->content;
+	new->args = NULL;
+	if ((*tokens)->prev == NULL && (tkn->type == TOKEN_WORD || tkn->type == TOKEN_DBQUOTE || tkn->type == TOKEN_SQUOTE)) //da aggiuungere nella prima condizione che oltre ad essere il primo potrebbe anche essre subito dopo un tokken NON-WORD
 	{
-		tkn = (*list)->content;
-		if (tkn->type == TOKEN_EOF)
-			return (0);
-		tkn->type = COM_ARGS;
-		(*list) = (*list)->next;
-	}
-	tkn->type = COM_ARGS;
-	return (1);
-}
-
-/*
-static int parser_space(t_list **list)
-{
-	token *tkn;
-
-	tkn = (*list)->content;
-	if ((*list)->prev->content == NULL)
-		tkn->type = COM_ARGS;
-	return (0);
-}
-*/
-
-//problema echo "tfyv\"dbh" 
-static int parser_backslash_dbquote(t_list **list)
-{
-	token *tkn;
-	token *tkn_next;
-	t_list *tmp;
-	int i;
-
-	i = 1;
-	tmp = *list;
-	tkn = (*list)->content;
-	tkn_next = (*list)->next->content;
-	while (tkn->type != TOKEN_DBQUOTE)
-	{
-		if (tkn_next->type == TOKEN_DOLLAR || tkn_next->type == TOKEN_DBQUOTE)
-			tkn->type = TOKEN_DELETE;
-		else if (tkn_next->type == TOKEN_BACKSLASH)
+		new->cmd = tkn->value;
+		while (tknnext->type == TOKEN_WORD || tknnext->type == TOKEN_DBQUOTE || tknnext->type == TOKEN_SQUOTE)
 		{
-			while(tkn_next == TOKEN_BACKSLASH)
-			{
-				tmp = tmp->next;
-				i++;
-			}
-			if (i % 2 == 0)
-			{
-				while(tkn_next == TOKEN_BACKSLASH)
-				{
-					tkn->type = COM_ARGS;
-					tkn_next->type = TOKEN_DELETE;
-					(*list) = (*list)->next->next;
-				}
-			}
-			else
-				printf("Error");
+			ft_lstadd_back(&new->args, ft_lstnew(tknnext->value));
+			(*tokens) = (*tokens)->next;
+			tknnext = (*tokens)->next->content;
 		}
-		else
-			tkn->type = COM_ARGS;
-		(*list) = (*list)->next;
-	}
-	return (1);
+	} // ew
+	tkn = (*tokens)->content;
+	if (tkn->type == TOKEN_REDIR_OUT)
+		new->outpath = tkn->value;
+	new->inpath = NULL;
+	new->outfd = 1;
+	new->infd = 0;
+	return (new);
 }
-
-static int parser_backslash_squote(t_list **list)
-{
-	token *tkn;
-	token *tkn_next;
-	t_list *tmp;
-	int i;
-
-	i = 1;
-	tmp = *list;
-	tkn = (*list)->content;
-	tkn_next = (*list)->next->content;
-	if (tkn_next->type == TOKEN_DOLLAR || tkn_next->type == TOKEN_SQUOTE)
-		tkn->type = TOKEN_DELETE;
-	else if (tkn_next->type == TOKEN_BACKSLASH)
-	{
-		while(tkn_next == TOKEN_BACKSLASH)
-		{
-			tmp = tmp->next;
-			i++;
-		}
-		if (i % 2 == 0)
-		{
-			while(tkn_next == TOKEN_BACKSLASH)
-			{
-				tkn->type = COM_ARGS;
-				tkn_next->type = TOKEN_DELETE;
-				(*list) = (*list)->next->next;
-			}
-		}
-		else
-			printf("Error");
-	}
-	else
-		tkn->type = COM_ARGS;
-	return (1);
-}
-
-static int parser_SQ(t_list **list)
-{
-	token *tkn;
-	token *tkn_next;
-
-	tkn = (*list)->content;
-	tkn->type = COM_ARGS;
-	(*list) = (*list)->next;
-	while (tkn->type != TOKEN_SQUOTE)
-	{
-		tkn = (*list)->content;
-		if(tkn->type == TOKEN_BACKSLASH)
-			parser_backslash_squote(list);
-		else
-			tkn->type = COM_ARGS;
-		(*list) = (*list)->next;
-	}
-	return (1);
-}
-
-static int parser_backslash(t_list **list)
-{
-	token *tkn;
-	token *tkn_next;
-
-	tkn = (*list)->content;
-	tkn_next = (*list)->next->content;
-	if(tkn_next->type == TOKEN_BACKSLASH)
-	{
-		tkn->type = COM_ARGS;
-		tkn_next->type = TOKEN_DELETE;
-	}
-	else if (tkn_next->type == TOKEN_DOLLAR || tkn_next->type == TOKEN_DBQUOTE)
-		return (0);
-}
-
 
 
 t_list	*parser(t_list *tokens)
 {
 	token   *tkn;
 	t_list	*list;
+	t_list	*ret;
+	cmd		*comd;
 
+	ret = NULL;
 	list = tokens;
-	printf("nel parser\n");
-	print_list(list);
-	while(list)
+	while(list->next)
 	{
-		printf("test\n");
-		print_list(list);
-		printf("test\n");
 		tkn = list->content;
-		if ((*list).prev == NULL)
-			tkn->type = COM_NAME;
-		//else if (tkn->type == TOKEN_SPACE)
-			//check_error(parser_space(&list));
-		else if (tkn->type == TOKEN_SQUOTE)
-			check_error(parser_SQ(&list));
-		else if (tkn->type == TOKEN_DBQUOTE)
-			check_error(parser_DBQ(&list));
-		else if (tkn->type == TOKEN_BACKSLASH)
-			check_error(parser_backslash(&list));
-		else
-			tkn->type = COM_ARGS;
+		comd = new_cmd(&list);
+		ft_lstadd_back(&ret, ft_lstnew(comd));
 		list = list->next;
 	}
-	return (list);
+	return (ret);
 }
 

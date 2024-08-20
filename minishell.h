@@ -20,6 +20,7 @@
 # include "libft/libft.h"
 // Definizioni di prototipi di funzione, se necessario
 // ...
+# define PROMPT "MINISHELL$>"
 
 
 typedef enum {
@@ -31,7 +32,6 @@ typedef enum {
     TOKEN_REDIR_PRE,    //     = <<
     TOKEN_EOF,          // END OF FILE
     TOKEN_AND,
-    TOKEN_OR,
     TOKEN_DOLLAR,
     TOKEN_OPEN_P,
     TOKEN_CLOSE_P,
@@ -48,7 +48,6 @@ typedef enum {
 
 
 typedef struct s_token {
-
     TokenType   type;
     char        *value;
 } token;
@@ -60,16 +59,32 @@ typedef struct s_token_list {
     struct s_token_list    *prev;
 }   t_token_list;
 
+typedef struct s_cmd {
+
+    char    *cmd;
+    t_list  *args;
+    char    **argv;
+    int     infd;
+    char    *inpath;
+    int     outfd;
+    char    *outpath;
+}   cmd;
+
 /*TOKENIZER*/
 void    go_next(char **str);
 int space_until_next(char   *str);
 t_list    *tokenize(char   *str, t_list  **list);
 
 /*debug*/
-void    print_list(t_list *list);
+void    print_tokens(t_list *list);
+void    print_parse(t_list *list);
 
 /*parser*/
 t_list	*parser(t_list *tokens);
 
+
+/*utils*/
+int ft_istokenchar(char c);
+int ft_isspace(char c);
 
 #endif

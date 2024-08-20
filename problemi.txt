@@ -1,2 +1,5 @@
 1) Se faccio freccia su ^ prende tutti i comandi precedenti in memoria e li riesegue
+	la lista non viene riinizializzata mma utilizziamo sempre la stessa
+
+2) da gestire la differenza tra dquote e squote e gli escape char. \
 

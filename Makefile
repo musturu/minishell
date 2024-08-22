@@ -40,7 +40,7 @@ LIBFT_DIR 	= libft
 LIBFT 		= libft/libft.a
 RM 			= rm -rf
 
-SRC = main.c tokenizer.c utils_token.c parser.c
+SRC = main.c tokenizer.c utils_token.c parser.c utils_parse_conditions.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

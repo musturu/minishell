@@ -1,4 +1,5 @@
 #include "../minishell.h"
+#include <stdio.h>
 
 void    read_input();
 
@@ -29,6 +30,7 @@ void    print_parse(t_list *list)
         printf("NEW COMMAND\n");
         cmd = tmp->content;
         printf("CMD: %s\n", cmd->cmd);
+		printf("\n\tINPATH:%s -----> OUTPATH:%s\n", cmd->inpath, cmd->outpath);
         while (cmd->args)
         {
             printf("\tARG: %s\n",  (char *)cmd->args->content);
@@ -73,6 +75,7 @@ void    read_input()
     t_list *plist;
 
     list = NULL;
+	plist = NULL;
     while (1)
     {
         str = readline(PROMPT);
@@ -81,7 +84,7 @@ void    read_input()
             continue;
         list = tokenize(str, &list);
         print_tokens(list);
-        plist = parser(list);
+        plist = parser2(&list, &plist);
         print_parse(plist);
         ft_lstclear(&list, free);
         ft_lstclear(&plist, free);

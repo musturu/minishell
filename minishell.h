@@ -26,8 +26,8 @@
 typedef enum {
     TOKEN_WORD,         //  o comando o file ??
     TOKEN_PIPE,         //      = |
-    TOKEN_REDIR_IN,     //     = >
-    TOKEN_REDIR_OUT,    //   m bvhcgcbcbhbjknmlkòl  = <
+    TOKEN_REDIR_OUT,     //     = >
+    TOKEN_REDIR_IN,    //   m bvhcgcbcbhbjknmlkòl  = <
     TOKEN_REDIR_APPEND, //  = >>
     TOKEN_REDIR_PRE,    //     = <<
     TOKEN_EOF,          // END OF FILE
@@ -81,6 +81,10 @@ void    print_parse(t_list *list);
 
 /*parser*/
 t_list	*parser(t_list *tokens);
+t_list	*parser2(t_list **tokens,t_list **parsed_list);
+char	is_redirection(TokenType type);
+char	is_string(TokenType type);
+char	is_after_break(t_list *tokens);
 
 
 /*utils*/

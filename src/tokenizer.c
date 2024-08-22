@@ -27,9 +27,9 @@ static TokenType   get_token_type(char *str)
     if (!ft_strncmp(str, "<<", 2))
         return (TOKEN_REDIR_PRE);
     if (!ft_strncmp(str, ">", 1))
-        return (TOKEN_REDIR_IN);
-    if (!ft_strncmp(str, ">", 1))
         return (TOKEN_REDIR_OUT);
+    if (!ft_strncmp(str, ">", 1))
+        return (TOKEN_REDIR_IN);
     if (!ft_strncmp(str, "&", 1))
         return (TOKEN_AND);
     if (!ft_strncmp(str, "$", 1))
@@ -68,7 +68,7 @@ static int append_token(char **str, t_list **lst)
 {
     token   *tok;
 
-    tok = calloc(1, sizeof(token));
+    tok = ft_calloc(1, sizeof(token));
     if (!tok)
         return (0);
     tok->type = get_token_type(*str);
@@ -81,6 +81,7 @@ static int append_token(char **str, t_list **lst)
 }
 
 
+//to add : EXPANDER
 
 t_list    *tokenize(char   *str, t_list  **list)
 {

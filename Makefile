@@ -70,7 +70,7 @@ fclean: clean
 	@$(RM) $(NAME)
 	@make fclean -s -C libft
 
-git:
+git: fclean
 	git add .
 	git commit -m "update"
 	git push

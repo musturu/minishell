@@ -57,18 +57,18 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 $(LIBFT):
 	@echo "Compiling libft..."
-	@make bonus -C libft
-	@make -C libft
+	@make -s -C libft
+	@make bonus -s -C libft
 
 clean:
 	@echo "Cleaning..."
-	@make clean -C libft
+	@make clean -s -C libft
 	@$(RM) $(OBJ_DIR)
 
 fclean: clean
 	@echo "Fcleaning..."
-	$(RM) $(NAME)
-	$(RM) $(LIBFT)
+	@$(RM) $(NAME)
+	@make fclean -s -C libft
 
 git:
 	git add .
@@ -78,7 +78,6 @@ git:
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-re: fclean
-	@make all
+re: fclean all
 
 .PHONY: all clean fclean re

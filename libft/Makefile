@@ -36,20 +36,20 @@ CFLAGS = -Wall -Werror -Wextra
 RM = rm -f
 
 .c.o:
-		${CC} ${CFLAGS} -g -c $< -o ${<:.c=.o}
+	@${CC} ${CFLAGS} -g -c $< -o ${<:.c=.o}
 
 $(NAME): $(OUTFILE)
-		ar rcs $(NAME) $(OUTFILE)
+		@ar rcs $(NAME) $(OUTFILE)
 
 bonus: 	$(BOUTFILE)
-		ar rcs $(NAME) $(BOUTFILE)
+		@ar rcs $(NAME) $(BOUTFILE)
 
 all:	$(NAME)
 
 clean:
-		$(RM) $(OUTFILE) $(BOUTFILE)
+		@$(RM) $(OUTFILE) $(BOUTFILE)
 
 fclean: clean
-		$(RM) $(NAME)
+		@$(RM) $(NAME)
 
 re: 	fclean all

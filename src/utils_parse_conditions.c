@@ -8,6 +8,8 @@ char	is_after_break(t_list *tokens)
 	if (tokens->prev == NULL)
 		return (1);
 	tkn = tokens->prev->content;
+	if (tkn == TOKEN_WORD && tokens->prev->prev && ((token *)(tokens->prev->prev->content))->type == TOKEN_REDIR_OUT)
+		return (1);
 	return (tkn->type == TOKEN_AND || tkn->type == TOKEN_PIPE);
 }
 

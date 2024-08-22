@@ -139,7 +139,6 @@ static int	append_cmd(t_list	**tokens, t_list **parsed_list)
 	command->cmd = get_command_command(tokens);
 	command->args = get_command_args(tokens);
 	command->outpath = get_command_out(tokens);
-	printf("wtf%s\n", command->cmd);
 	ft_lstadd_back(parsed_list, ft_lstnew(command));
 	return (1);
 }

@@ -50,7 +50,7 @@ static char	*get_command_command(t_list **tokens)
 	token	*tkn;
 
 	tkn = (*tokens)->content;
-	if (is_after_break(*tokens) //da aggiuungere su is_after_break che prev  puo essere is_string se prev.prev == is_redirection
+	if (is_after_break(*tokens)
 		&& (is_string(tkn->type) || is_redirection(tkn->type)))  
 	{
 		*tokens = (*tokens)->next;
@@ -79,51 +79,48 @@ static t_list	*get_command_args(t_list **tokens)
 
 static char	*get_command_in(t_list **tokens)
 {
-	token	*tkn;
+	t_list	*lst;
+	char	*ret;
 
-	tkn = (*tokens)->content;
-	if ((tkn->type == TOKEN_REDIR_IN || tkn->type == TOKEN_REDIR_PRE) && (*tokens)->next)
+	lst = *tokens;
+	while (lst && !is_break(lst))
 	{
-		*tokens = (*tokens)->next;
-		tkn = (*tokens)->content;
-		if (is_string(tkn->type))
+		if ((((token *)(lst->content))->type == TOKEN_REDIR_IN || ((token *)(lst->content))->type == TOKEN_REDIR_PRE) && (*tokens)->next)
 		{
-			*tokens = (*tokens)->next;
-			return (tkn->value);
+			lst = lst->next;
+			if (is_string(((token *)(lst->content))->type))
+			{
+				ret = ft_strjoin(((token *)(lst->prev->content))->value, ((token *)(lst->content))->value);
+				ft_lst_remove_node(tokens, lst->prev, free);
+				ft_lst_remove_node(tokens, lst, free);
+				return (ret);
+			}
 		}
-
-	}
-	else if (tkn->type == TOKEN_PIPE)
-	{
-		*tokens = (*tokens)->next;
-		return (tkn->value);
+		lst = lst->next;
 	}
 	return (NULL);
 }
 
 static char	*get_command_out(t_list **tokens)
 {
-	token	*tkn;
+	t_list	*lst;
+	char	*ret;
 
-	tkn = (*tokens)->content;
-		printf("entra\n %i", tkn->type);
-	if ((tkn->type == TOKEN_REDIR_OUT || tkn->type == TOKEN_REDIR_APPEND) && (*tokens)->next)
+	lst = *tokens;
+	while (lst && !is_break(lst))
 	{
-		*tokens = (*tokens)->next;
-		tkn = (*tokens)->content;
-		if (is_string(tkn->type))
+		if ((((token *)(lst->content))->type == TOKEN_REDIR_OUT || ((token *)(lst->content))->type == TOKEN_REDIR_APPEND) && (*tokens)->next)
 		{
-			*tokens = (*tokens)->next;
-			return (tkn->value);
+			lst = lst->next;
+			if (is_string(((token *)(lst->content))->type))
+			{
+				ret = ft_strjoin(((token *)(lst->prev->content))->value, ((token *)(lst->content))->value);
+				ft_lst_remove_node(tokens, lst->prev, free);
+				ft_lst_remove_node(tokens, lst, free);
+				return (ret);
+			}
 		}
-
-	}
-	else if (tkn->type == TOKEN_PIPE)
-		return (tkn->value);
-	else if (tkn->type == TOKEN_AND || tkn->type == TOKEN_EOF)
-	{
-		*tokens = (*tokens)->next;
-		return (tkn->value);
+		lst = lst->next;
 	}
 	return (NULL);
 }
@@ -136,9 +133,9 @@ static int	append_cmd(t_list	**tokens, t_list **parsed_list)
 	if (!command)
 		return (0);
 	command->inpath = get_command_in(tokens);
+	command->outpath = get_command_out(tokens);
 	command->cmd = get_command_command(tokens);
 	command->args = get_command_args(tokens);
-	command->outpath = get_command_out(tokens);
 	ft_lstadd_back(parsed_list, ft_lstnew(command));
 	return (1);
 }

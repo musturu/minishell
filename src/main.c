@@ -10,6 +10,7 @@ void ft_zozzle()
 
 void    ft_signals()
 {
+
     signal(SIGINT, ft_zozzle);
     signal(SIGKILL, ft_zozzle);
 }

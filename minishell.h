@@ -83,12 +83,14 @@ void    print_parse(t_list *list);
 t_list	*parser(t_list *tokens);
 t_list	*parser2(t_list **tokens,t_list **parsed_list);
 char	is_redirection(TokenType type);
+char	is_break(t_list *tokens);
 char	is_string(TokenType type);
 char	is_after_break(t_list *tokens);
 
 
 /*utils*/
 int ft_istokenchar(char c);
+void	ft_lst_remove_node(t_list **lst, t_list *node, void (*del)(void *));
 int ft_isspace(char c);
 
 #endif

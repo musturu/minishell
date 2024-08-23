@@ -1,5 +1,15 @@
 
 #include "../minishell.h"
+#include <stdio.h>
+
+
+char	is_break(t_list *tokens)
+{
+	token	*tkn;
+
+	tkn = tokens->content;
+	return (tkn->type == TOKEN_EOF || tkn->type == TOKEN_PIPE || tkn->type == TOKEN_AND);
+}
 
 char	is_after_break(t_list *tokens)
 {
@@ -19,6 +29,7 @@ char	is_string(TokenType type)
 		|| type == TOKEN_SQUOTE 
 		|| type == TOKEN_DBQUOTE);
 }
+
 
 char	is_redirection(TokenType type)
 {

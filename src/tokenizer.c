@@ -28,7 +28,7 @@ static TokenType   get_token_type(char *str)
         return (TOKEN_REDIR_PRE);
     if (!ft_strncmp(str, ">", 1))
         return (TOKEN_REDIR_OUT);
-    if (!ft_strncmp(str, ">", 1))
+    if (!ft_strncmp(str, "<", 1))
         return (TOKEN_REDIR_IN);
     if (!ft_strncmp(str, "&", 1))
         return (TOKEN_AND);

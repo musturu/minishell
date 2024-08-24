@@ -5,7 +5,7 @@ void    read_input();
 
 void ft_zozzle()
 {
-    printf("\n"PROMPT"");
+    printf("\n"PROMPT" ");
 }
 
 void    ft_signals()
@@ -90,5 +90,6 @@ void    read_input()
         ft_lstclear(&list, free);
         ft_lstclear(&plist, free);
         list = NULL;
+		plist = NULL;
     }
 }

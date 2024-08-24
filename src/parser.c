@@ -85,7 +85,7 @@ static char	*get_command_in(t_list **tokens)
 	lst = *tokens;
 	while (lst && !is_break(lst))
 	{
-		if ((((token *)(lst->content))->type == TOKEN_REDIR_IN || ((token *)(lst->content))->type == TOKEN_REDIR_PRE) && (*tokens)->next)
+		if ((((token *)(lst->content))->type == TOKEN_REDIR_IN || ((token *)(lst->content))->type == TOKEN_REDIR_PRE) && lst->next)
 		{
 			lst = lst->next;
 			if (is_string(((token *)(lst->content))->type))

@@ -14,13 +14,19 @@
 #include <stdio.h>
 
 
-cmd	*new_cmd(t_list **tokens)
+/*
+ * the parser functions in the same exact way the tokenizer does, by calling itself it attaches
+ * at the end of the list a new node, consuming the utilized token nodes in the process.
+ *
+ */
+
+command	*new_cmd(t_list **tokens)
 {
-	cmd	*new;
+	command	*new;
 	token *tkn;
 	token *tknnext;
 
-	new = malloc(sizeof(cmd));
+	new = malloc(sizeof(command));
 	if (!new)
 		return (NULL);
 	tkn = (*tokens)->content;
@@ -48,13 +54,15 @@ cmd	*new_cmd(t_list **tokens)
 static char	*get_command_command(t_list **tokens)
 {
 	token	*tkn;
+	char	*ret;
 
 	tkn = (*tokens)->content;
 	if (is_after_break(*tokens)
 		&& (is_string(tkn->type) || is_redirection(tkn->type)))  
 	{
-		*tokens = (*tokens)->next;
-		return (tkn->value);
+		ret = ft_strdup(tkn->value);
+		ft_lst_remove_node(tokens, *tokens, free_token);
+		return (ret);
 	}
 	else
 		return (NULL);
@@ -71,7 +79,8 @@ static t_list	*get_command_args(t_list **tokens)
 	while (is_string(tknnext->type))
 	{
 		ft_lstadd_back(&ret, ft_lstnew(tknnext->value));
-		(*tokens) = (*tokens)->next;
+		ft_lst_remove_node(tokens, *tokens, free_token);
+		/*(*tokens) = (*tokens)->next;*/
 		tknnext = (*tokens)->content;
 	}
 	return (ret);
@@ -91,8 +100,8 @@ static char	*get_command_in(t_list **tokens)
 			if (is_string(((token *)(lst->content))->type))
 			{
 				ret = ft_strjoin(((token *)(lst->prev->content))->value, ((token *)(lst->content))->value);
-				ft_lst_remove_node(tokens, lst->prev, free);
-				ft_lst_remove_node(tokens, lst, free);
+				ft_lst_remove_node(tokens, lst->prev, free_token);
+				ft_lst_remove_node(tokens, lst, free_token);
 				return (ret);
 			}
 		}
@@ -115,8 +124,8 @@ static char	*get_command_out(t_list **tokens)
 			if (is_string(((token *)(lst->content))->type))
 			{
 				ret = ft_strjoin(((token *)(lst->prev->content))->value, ((token *)(lst->content))->value);
-				ft_lst_remove_node(tokens, lst->prev, free);
-				ft_lst_remove_node(tokens, lst, free);
+				ft_lst_remove_node(tokens, lst->prev, free_token);
+				ft_lst_remove_node(tokens, lst, free_token);
 				return (ret);
 			}
 		}
@@ -127,16 +136,16 @@ static char	*get_command_out(t_list **tokens)
 
 static int	append_cmd(t_list	**tokens, t_list **parsed_list)
 {
-	cmd	*command;
+	command	*cmd;
 
-	command = ft_calloc(1, sizeof(cmd));
-	if (!command)
+	cmd = ft_calloc(1, sizeof(command));
+	if (!cmd)
 		return (0);
-	command->inpath = get_command_in(tokens);
-	command->outpath = get_command_out(tokens);
-	command->cmd = get_command_command(tokens);
-	command->args = get_command_args(tokens);
-	ft_lstadd_back(parsed_list, ft_lstnew(command));
+	cmd->inpath = get_command_in(tokens);
+	cmd->outpath = get_command_out(tokens);
+	cmd->cmd = get_command_command(tokens);
+	cmd->args = get_command_args(tokens);
+	ft_lstadd_back(parsed_list, ft_lstnew(cmd));
 	return (1);
 }
 
@@ -153,7 +162,7 @@ t_list	*parser(t_list *tokens)
 {
 	t_list	*list;
 	t_list	*ret;
-	cmd		*comd;
+	command		*comd;
 
 	ret = NULL;
 	list = tokens;

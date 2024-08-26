@@ -68,7 +68,7 @@ typedef struct s_cmd {
     char    *inpath;
     int     outfd;
     char    *outpath;
-}   cmd;
+}   command;
 
 /*TOKENIZER*/
 void    go_next(char **str);
@@ -87,6 +87,11 @@ char	is_break(t_list *tokens);
 char	is_string(TokenType type);
 char	is_after_break(t_list *tokens);
 
+/*memory*/
+
+void	free_command(void *cmd);
+void	free_token(void	*tkn);
+void	free_matrix(char **mat);
 
 /*utils*/
 int ft_istokenchar(char c);

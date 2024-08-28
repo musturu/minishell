@@ -39,10 +39,10 @@ typedef enum {
     TOKEN_SQUOTE,
     TOKEN_BACKSLASH,
     TOKEN_SPACE,
-    COM_NAME,
-    COM_ARGS,
-    FILE_WORD,
     TOKEN_DELETE,
+	TOKEN_DPIPE,
+	TOKEN_DAND,
+	TOKEN_PCOMM
     // Aggiungere altri tipi di token necessari
 } TokenType;
 
@@ -52,22 +52,17 @@ typedef struct s_token {
     char        *value;
 } token;
 
-typedef struct s_token_list {
-
-    token   token;
-    struct s_token_list    *next;
-    struct s_token_list    *prev;
-}   t_token_list;
-
 typedef struct s_cmd {
 
-    char    *cmd;
-    t_list  *args;
-    char    **argv;
-    int     infd;
-    char    *inpath;
-    int     outfd;
-    char    *outpath;
+    char		*cmd;		//command name / path
+    t_list  	*args;		//list of arguments
+    char    	*inpath;	//file name of INPUT
+    char    	*outpath;	//file name of OUTPUT
+    char    	**argv;		//arguments matrix (necessary for execve)
+    int     	infd;		//input fd
+    int     	outfd;		//output fd
+	TokenType	inconnect;	//6 possibilities in bash = & | ; && || EOF 
+	TokenType	outconnect; 
 }   command;
 
 /*TOKENIZER*/
@@ -80,8 +75,7 @@ void    print_tokens(t_list *list);
 void    print_parse(t_list *list);
 
 /*parser*/
-t_list	*parser(t_list *tokens);
-t_list	*parser2(t_list **tokens,t_list **parsed_list);
+t_list	*parser(t_list **tokens,t_list **parsed_list);
 char	is_redirection(TokenType type);
 char	is_break(t_list *tokens);
 char	is_string(TokenType type);

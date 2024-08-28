@@ -1,4 +1,5 @@
 #include "../minishell.h"
+#include <curses.h>
 #include <stdio.h>
 
 void    read_input();
@@ -24,7 +25,7 @@ int main()
 void    print_parse(t_list *list)
 {
     t_list  *tmp = list;
-    cmd     *cmd;
+    command     *cmd;
 
     while (tmp)
     {
@@ -32,6 +33,10 @@ void    print_parse(t_list *list)
         cmd = tmp->content;
         printf("CMD: %s\n", cmd->cmd);
 		printf("\n\tINPATH:%s -----> OUTPATH:%s\n", cmd->inpath, cmd->outpath);
+		if (cmd->inconnect)
+			printf("CONNECTOR IN: %i (1 = PIPE, 7 = &)\n", cmd->inconnect);
+		if (cmd->outconnect)
+			printf("CONNECTOR OUT: %i\n", cmd->outconnect);
         while (cmd->args)
         {
             printf("\tARG: %s\n",  (char *)cmd->args->content);
@@ -72,24 +77,26 @@ int blank_check(char *str)
 void    read_input()
 {
     char *str;
-    t_list *list;
+    t_list *tlist;
     t_list *plist;
 
-    list = NULL;
+    tlist = NULL;
 	plist = NULL;
     while (1)
     {
-        str = readline(PROMPT);
+        str = readline(PROMPT" ");
         add_history(str);
         if (blank_check(str))
             continue;
-        list = tokenize(str, &list);
-        print_tokens(list);
-        plist = parser2(&list, &plist);
+        tlist = tokenize(str, &tlist);
+        print_tokens(tlist);
+        plist = parser(&tlist, &plist);
+		if (plist == NULL)
+			printf("syntax error\n");
         print_parse(plist);
-        ft_lstclear(&list, free);
+        ft_lstclear(&tlist, free);
         ft_lstclear(&plist, free);
-        list = NULL;
+        tlist = NULL;
 		plist = NULL;
     }
 }

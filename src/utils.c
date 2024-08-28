@@ -17,7 +17,7 @@ void	ft_lst_remove_node(t_list **lst, t_list *node, void (*del)(void *))
 				*lst = current->next;
 			if (prev)
 				prev->next = current->next;
-			if (current->next && current->prev)
+			if (current->next)
 				current->next->prev = prev;
 			ft_lstdelone(current, del);
 			return ;

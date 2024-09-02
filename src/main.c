@@ -2,7 +2,7 @@
 #include <curses.h>
 #include <stdio.h>
 
-void    read_input();
+void    read_input(char **env);
 
 void ft_zozzle()
 {
@@ -16,10 +16,13 @@ void    ft_signals()
     signal(SIGKILL, ft_zozzle);
 }
 
-int main()
+int main(int argc, char **argv, char **env)
 {
+	(void)argc;
+	(void)argv;
+	printf("%s\n", env[1]);
     ft_signals();
-    read_input();
+    read_input(env);
 }
 
 void    print_parse(t_list *list)
@@ -27,23 +30,25 @@ void    print_parse(t_list *list)
     t_list  *tmp = list;
     command     *cmd;
 
+	printf("______________PARSER_______________\n\n");
     while (tmp)
     {
-        printf("NEW COMMAND\n");
+        printf("NEW COMMAND\t");
         cmd = tmp->content;
         printf("CMD: %s\n", cmd->cmd);
-		printf("\n\tINPATH:%s -----> OUTPATH:%s\n", cmd->inpath, cmd->outpath);
-		if (cmd->inconnect)
-			printf("CONNECTOR IN: %i (1 = PIPE, 7 = &)\n", cmd->inconnect);
-		if (cmd->outconnect)
-			printf("CONNECTOR OUT: %i\n", cmd->outconnect);
         while (cmd->args)
         {
             printf("\tARG: %s\n",  (char *)cmd->args->content);
             cmd->args = cmd->args->next;
         }
+		printf("\n\tINPATH:%s -----> OUTPATH:%s\n", cmd->inpath, cmd->outpath);
+		if (cmd->inconnect)
+			printf("CONNECTOR IN: %i (1 = PIPE, 7 = &)\n", cmd->inconnect);
+		if (cmd->outconnect)
+			printf("CONNECTOR OUT: %i\n", cmd->outconnect);
         tmp = tmp->next;
     }
+	printf("______________________________________\n\n");
 }
 
 void    print_tokens(t_list *list)
@@ -51,12 +56,14 @@ void    print_tokens(t_list *list)
     t_list  *tmp = list;
     token   *tkn;
 
+	printf("________________TOKENS_________________\n\n");
     while (tmp)
     {
         tkn = tmp->content;
-        printf("TOKENTYPE: %i\tTOKENVALUE:<%s> prev :%p - cur :%p \n", tkn->type, tkn->value, tmp->prev, tmp);
+        printf("TYPE:\t%i\tVALUE:\t[%s]\tprev: [%p] - cur : [%p]\n", tkn->type, tkn->value, tmp->prev, tmp);
         tmp = tmp->next;
     }
+	printf("______________________________________\n\n");
 }
 
 int blank_check(char *str)
@@ -74,7 +81,7 @@ int blank_check(char *str)
 }
 
 
-void    read_input()
+void    read_input(char **env)
 {
     char *str;
     t_list *tlist;
@@ -94,8 +101,9 @@ void    read_input()
 		if (plist == NULL)
 			printf("syntax error\n");
         print_parse(plist);
-        ft_lstclear(&tlist, free);
-        ft_lstclear(&plist, free);
+		execute(&plist, env);
+        ft_lstclear(&tlist, free_token);
+        ft_lstclear(&plist, free_command);
         tlist = NULL;
 		plist = NULL;
     }

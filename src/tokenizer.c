@@ -50,7 +50,7 @@ static char    *get_token_value(char   *str, TokenType type)
 {
     if (type == TOKEN_EOF)
         return (ft_strdup("EOF"));
-    if (type == TOKEN_PIPE || type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || type == TOKEN_AND || type == TOKEN_DOLLAR || type == TOKEN_CLOSE_P || type == TOKEN_OPEN_P || type == TOKEN_REDIR_APPEND || type == TOKEN_REDIR_PRE || type == TOKEN_SPACE)
+    if (type == TOKEN_PIPE || type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT || type == TOKEN_AND || type == TOKEN_DOLLAR || type == TOKEN_CLOSE_P || type == TOKEN_OPEN_P || type == TOKEN_SPACE)
         return (ft_substr(str, 0, 1));
     else if (type != TOKEN_WORD && type != TOKEN_DBQUOTE && type != TOKEN_SQUOTE)
         return (ft_substr(str, 0, 2));

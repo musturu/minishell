@@ -12,6 +12,7 @@
 
 #include "../minishell.h"
 #include <stdio.h>
+#include <unistd.h>
 
 
 /*
@@ -166,6 +167,8 @@ static int	append_cmd(t_list	**tokens, t_list **parsed_list)
 		return (0);
 	cmd->args = get_command_args(tokens);
 	cmd->outconnect = get_command_outconnect(tokens);
+	cmd->outfd = STDOUT_FILENO;
+	cmd->infd = STDIN_FILENO;
 	ft_lstadd_back(parsed_list, ft_lstnew(cmd));
 	return (1);
 }

@@ -81,15 +81,21 @@ char	is_break(t_list *tokens);
 char	is_string(TokenType type);
 char	is_after_break(t_list *tokens);
 
-/*memory*/
+/*execute*/
 
+
+int	execute(t_list **parsed_list, char **env);
+
+/*memory*/
 void	free_command(void *cmd);
 void	free_token(void	*tkn);
 void	free_matrix(char **mat);
 
 /*utils*/
-int ft_istokenchar(char c);
+int	str_to_env_index(char **env, char *name);
+int		ft_istokenchar(char c);
+char	is_builtin(char *cmd);
 void	ft_lst_remove_node(t_list **lst, t_list *node, void (*del)(void *));
-int ft_isspace(char c);
+int		ft_isspace(char c);
 
 #endif

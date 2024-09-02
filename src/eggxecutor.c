@@ -1,5 +1,17 @@
 #include "../minishell.h"
 #include <stdio.h>
+#include <unistd.h>
+
+
+static int	access_or_create(char *path)
+{
+	if (access(path , W_OK) == 0)
+		return (1);
+	else if (access(path , F_OK) == -1)
+		return (-1);
+	return (0);
+}
+
 
 static int	redir_out(command *cmd)
 {
@@ -7,14 +19,16 @@ static int	redir_out(command *cmd)
 	{
 		if (cmd->outpath[1] == '>')
 		{
-			if (access(cmd->outpath + 2, W_OK) == 0)
+			if (access_or_create(cmd->outpath + 2))
 				cmd->outfd = open(cmd->inpath + 2, O_APPEND | O_CREAT, NULL);
 			else
 				return (0);
 		}
 		else
-			if (access(cmd->outpath + 1, W_OK) == 0) 
-				cmd->infd = open(cmd->inpath + 1, O_WRONLY | O_CREAT);
+			if (access_or_create(cmd->outpath + 1))
+		{
+				cmd->infd = open(cmd->inpath + 1, O_CREAT | O_WRONLY, 00600);  //todo creare file
+		}
 			else
 				return (0);
 	}
@@ -44,6 +58,8 @@ static int	redir_in(command *cmd)
 }
 
 
+
+
 char	*get_path(char **env, char *command)
 {
 	char	**paths;
@@ -67,10 +83,11 @@ char	*get_path(char **env, char *command)
 		return (ret);
 	}
 	free(ret);
+	free_matrix(paths);
 	return (NULL);
 }
 
-int	execute(t_list **parsed_list, char **env)
+int	execute(t_list **parsed_list, char **env) 
 {
 	command	*cur;
 	command	*next;
@@ -89,8 +106,14 @@ int	execute(t_list **parsed_list, char **env)
 		next->infd = piped[0];
 		cur->outfd = piped[1];
 	}
+	printf("%s\n", (char *)cur->args->content);
+	cur->argv = listomap(&cur->args);
+	int i = 0;
+	while (cur->argv[i])
+	{
+		printf("%s\n", cur->argv[i++]);
+	}
 	pid = fork();
-	cur->argv = NULL;
 	if (!pid)
 	{
 		redir_in(cur); //add guard
@@ -101,10 +124,13 @@ int	execute(t_list **parsed_list, char **env)
 			dup2(STDOUT_FILENO, cur->outfd); //add dup2 guard
 		if (is_builtin(cur->cmd))
 			printf("BUILTIN!\n");
-		else
+		else 
 		{
-			printf("%i,%i!%s\n", cur->outfd, cur->infd, get_path(env, cur->cmd));
-			execve(get_path(env, cur->cmd),cur->argv, env); //spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
+			char	*prova = get_path(env, cur->cmd);
+			if (prova == NULL && execve(cur->cmd ,cur->argv, env) == -1)
+					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
+			else if (execve(prova ,cur->argv, env) == -1)
+					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
 		}
 	}
 	if (cur->outconnect != TOKEN_AND)

@@ -20,14 +20,15 @@ static int	redir_out(command *cmd)
 		if (cmd->outpath[1] == '>')
 		{
 			if (access_or_create(cmd->outpath + 2))
-				cmd->outfd = open(cmd->inpath + 2, O_APPEND | O_CREAT, NULL);
+				cmd->outfd = open(cmd->outpath + 2, O_APPEND | O_CREAT, NULL);
 			else
 				return (0);
 		}
 		else
 			if (access_or_create(cmd->outpath + 1))
 		{
-				cmd->infd = open(cmd->inpath + 1, O_CREAT | O_WRONLY, 00600);  //todo creare file
+			printf("entrato %s\n", cmd->outpath);
+				cmd->infd = open(cmd->outpath + 1, O_CREAT | O_WRONLY, 00600);  //todo creare file
 		}
 			else
 				return (0);
@@ -106,13 +107,6 @@ int	execute(t_list **parsed_list, char **env)
 		next->infd = piped[0];
 		cur->outfd = piped[1];
 	}
-	printf("%s\n", (char *)cur->args->content);
-	cur->argv = listomap(&cur->args);
-	int i = 0;
-	while (cur->argv[i])
-	{
-		printf("%s\n", cur->argv[i++]);
-	}
 	pid = fork();
 	if (!pid)
 	{
@@ -126,12 +120,16 @@ int	execute(t_list **parsed_list, char **env)
 			printf("BUILTIN!\n");
 		else 
 		{
+
 			char	*prova = get_path(env, cur->cmd);
+			cur->argv = listomap(prova, &cur->args);
+			printf("comando da executor = %s  cur arg = %s\n", prova, cur->argv[1]);
 			if (prova == NULL && execve(cur->cmd ,cur->argv, env) == -1)
 					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
 			else if (execve(prova ,cur->argv, env) == -1)
 					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
 		}
+
 	}
 	if (cur->outconnect != TOKEN_AND)
 		waitpid(pid, NULL, 0); //we can use the second parameter to store exit status of process. man waitpid

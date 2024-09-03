@@ -24,4 +24,6 @@ here-doc, necessario??
 logica che cerca eseguibili con path relativi
 
 
+READLINE TORNA NULL QUANDO FAI CTRL+D !!!
+
 gestione degli errori

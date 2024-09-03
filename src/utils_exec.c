@@ -13,27 +13,25 @@ char	is_builtin(char *cmd)
 	return (0);
 }
 
-char **listomap(t_list **list)
+char **listomap(char *cmd, t_list **list)
 {
 	int i;
 	int size;
-
-
-	printf("%s", (char *)(*list)->content);
-	i = 0;
 	char **mat;
-	size = ft_lstsize(*list);
-	printf("%d  LSIRASHRJASd\n", size);
-	mat = (char **)malloc(sizeof(char *) * (size + 1));
 
-	while ((*list)->next)
+
+	size = ft_lstsize(*list);
+	mat = (char **)ft_calloc(sizeof(char *) , (size + 2));
+	mat[0] = cmd;
+	i = 1;
+	while ((*list))
 	{
 		mat[i] = ft_strdup((*list)->content);
-		printf("%s\n", mat[i]);
 		i++;
 		*list = (*list)->next;
 	}
 	mat[i] = NULL;
-	ft_lstclear(list, free);
+	if (*list)
+		ft_lstclear(list, free);
 	return (mat);
 }

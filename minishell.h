@@ -92,7 +92,7 @@ void	free_token(void	*tkn);
 void	free_matrix(char **mat);
 
 /*utils*/
-char	**listomap(t_list **list);
+char	**listomap(char *cmd,t_list **list);
 int		str_to_env_index(char **env, char *name);
 int		ft_istokenchar(char c);
 char	is_builtin(char *cmd);

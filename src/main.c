@@ -29,6 +29,7 @@ void    print_parse(t_list *list)
 {
     t_list  *tmp = list;
     command     *cmd;
+	t_list	*tmparg;
 
 	printf("______________PARSER_______________\n\n");
     while (tmp)
@@ -36,10 +37,11 @@ void    print_parse(t_list *list)
         printf("NEW COMMAND\t");
         cmd = tmp->content;
         printf("CMD: %s\n", cmd->cmd);
-        while (cmd->args)
+		tmparg = cmd->args;
+        while (tmparg)
         {
-            printf("\tARG: %s\n",  (char *)cmd->args->content);
-            cmd->args = cmd->args->next;
+            printf("\tARG: %s\n",  (char *)tmparg->content);
+            tmparg = tmparg->next;
         }
 		printf("\n\tINPATH:%s -----> OUTPATH:%s\n", cmd->inpath, cmd->outpath);
 		if (cmd->inconnect)

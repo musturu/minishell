@@ -18,12 +18,17 @@ exit status dei comandi, finire i segnali e utilizzare la variabile globale (nec
 norminettare
 
 
-here-doc, necessario??
+here-doc, necessario??(si)
 
 
-logica che cerca eseguibili con path relativi
+REDIRECTION MULTIPLE
 
 
 READLINE TORNA NULL QUANDO FAI CTRL+D !!!
 
-gestione degli errori
+
+gestione degli errori un po meglio, ogni malloc andrebbe guardato e ad ogni step dovrebbe esserci un
+modo per uscire pulito
+
+
+READLINE DEVE CANCCELLARE LA STRINGA INPUTTATA QUANDO FAI CTRL C (FT_ZOZZLE NON BASTA)

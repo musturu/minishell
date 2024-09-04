@@ -98,12 +98,15 @@ void    read_input(char **env)
         if (blank_check(str))
             continue;
         tlist = tokenize(str, &tlist);
+		printf("exited tokenizer\n");
         print_tokens(tlist);
         plist = parser(&tlist, &plist);
+		printf("exited parser\n");
 		if (plist == NULL)
 			printf("syntax error\n");
         print_parse(plist);
 		execute(&plist, env);
+		printf("exited executor\n");
         ft_lstclear(&tlist, free_token);
         ft_lstclear(&plist, free_command);
         tlist = NULL;

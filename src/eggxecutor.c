@@ -92,6 +92,7 @@ int	execute(t_list **parsed_list, char **env)
 {
 	command	*cur;
 	command	*next;
+	command	*prev;
 	int		piped[2];
 	pid_t	pid;
 
@@ -100,6 +101,8 @@ int	execute(t_list **parsed_list, char **env)
 	cur = (*parsed_list)->content;
 	if ((*parsed_list)->next)
 		next = (*parsed_list)->next->content;
+	if ((*parsed_list)->prev)
+		prev = (*parsed_list)->prev->content;
 	if (cur->outconnect == TOKEN_PIPE)
 	{
 		if (pipe(piped) == -1)
@@ -115,17 +118,19 @@ int	execute(t_list **parsed_list, char **env)
 		redir_out(cur); //add guard
 		if (cur->infd != STDIN_FILENO)
 		{
+			printf("entrato in infd\n");
 			dup2(cur->infd, STDIN_FILENO); //add dup2 guard
+			close(prev->outfd);
 		}
 		if (cur->outfd != STDOUT_FILENO)
 		{
+			printf("entrato in outfd\n");
 			dup2(cur->outfd,STDOUT_FILENO); //add dup2 guard
 		}
 		if (is_builtin(cur->cmd))
 			printf("BUILTIN!\n");
 		else 
 		{
-
 			char	*prova = get_path(env, cur->cmd);
 			cur->argv = listomap(prova, &cur->args);
 			if (prova == NULL &&  execve(cur->cmd ,cur->argv, env) == -1)
@@ -133,11 +138,12 @@ int	execute(t_list **parsed_list, char **env)
 			else if (execve(prova ,cur->argv, env) == -1)
 					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
 		}
+		return 0;
 
 	}
+	execute(&(*parsed_list)->next, env);
 	if (cur->outconnect != TOKEN_AND)
 		waitpid(pid, NULL, 0); //we can use the second parameter to store exit status of process. man waitpid
-	execute(&(*parsed_list)->next, env);
 	return 1;
 }
 

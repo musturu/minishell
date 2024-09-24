@@ -82,7 +82,6 @@ int blank_check(char *str)
     return (1);
 }
 
-
 void    read_input(char **env)
 {
     char *str;

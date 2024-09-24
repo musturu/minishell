@@ -111,6 +111,7 @@ int	execute(t_list **parsed_list, char **env)
 		cur->outfd = piped[1];
 	}
 	pid = fork();
+
 	printf("PID == %i\n", pid);
 	if (!pid)
 	{
@@ -140,7 +141,9 @@ int	execute(t_list **parsed_list, char **env)
 		}
 		return 0;
 
-	}
+	}	
+	if (cur->inconnect == TOKEN_PIPE)
+		close(prev->outfd);
 	execute(&(*parsed_list)->next, env);
 	if (cur->outconnect != TOKEN_AND)
 		waitpid(pid, NULL, 0); //we can use the second parameter to store exit status of process. man waitpid

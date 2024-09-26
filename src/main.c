@@ -96,7 +96,7 @@ void    read_input(char **env)
         add_history(str);
         if (blank_check(str))
             continue;
-        tlist = tokenize(str, &tlist);
+        tlist = tokenize(str, &tlist, env); //add guard
 		printf("exited tokenizer\n");
         print_tokens(tlist);
         plist = parser(&tlist, &plist);

@@ -133,7 +133,11 @@ int	execute(t_list **parsed_list, char **env)
 		else 
 		{
 			char	*prova = get_path(env, cur->cmd);
-			cur->argv = listomap(prova, &cur->args);
+			printf("comando trovato:%s\n", prova);
+			if (prova)
+				cur->argv = listomap(prova, &cur->args);
+			else
+			 	cur->argv = listomap(cur->cmd, &cur->args);
 			if (prova == NULL &&  execve(cur->cmd ,cur->argv, env) == -1)
 					printf("command %s not found\n", cur->cmd);//spostare su un altra funzione a mettere get_path e argv su cmd cosi possono essere freeati
 			else if (execve(prova ,cur->argv, env) == -1)

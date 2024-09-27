@@ -61,8 +61,8 @@ typedef struct s_cmd {
     char    	**argv;		//arguments matrix (necessary for execve)
     int     	infd;		//input fd
     int     	outfd;		//output fd
-	TokenType	inconnect;	//6 possibilities in bash = & | ; && || EOF 
-	TokenType	outconnect; 
+	TokenType	inconnect;	//6 possibilities in bash = & | ; && || EOF
+	TokenType	outconnect;
 }   command;
 
 /*TOKENIZER*/
@@ -84,9 +84,8 @@ char	is_string(TokenType type);
 char	is_after_break(t_list *tokens);
 
 /*execute*/
-
-
-int	execute(t_list **parsed_list, char **env);
+int     execute(t_list **parsed_list, char **env);
+char	*get_path(char **env, char *command);
 
 /*memory*/
 void	free_command(void *cmd);

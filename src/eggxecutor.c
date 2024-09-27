@@ -40,7 +40,7 @@ static int	redir_in(command *cmd)
 {
 	if (cmd->inpath)
 	{
-		if (cmd->inpath[1] == '<') //da implementare << 
+		if (cmd->inpath[1] == '<') //da implementare <<
 		{
 		if (access(cmd->inpath + 2, R_OK) == 0)
 				cmd->infd = open(cmd->outpath + 2, O_RDONLY);
@@ -130,7 +130,7 @@ int	execute(t_list **parsed_list, char **env)
 		}
 		if (is_builtin(cur->cmd))
 			printf("BUILTIN!\n");
-		else 
+		else
 		{
 			char	*prova = get_path(env, cur->cmd);
 			printf("comando trovato:%s\n", prova);
@@ -145,7 +145,7 @@ int	execute(t_list **parsed_list, char **env)
 		}
 		return 0;
 
-	}	
+	}
 	if (cur->inconnect == TOKEN_PIPE)
 		close(prev->outfd);
 	execute(&(*parsed_list)->next, env);

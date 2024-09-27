@@ -20,13 +20,14 @@ int	count_quotes(char *str, char quote)
 		return (1);
 }
 
-char	*expand(char *str, char **env)
+char	**expand(char *str, char **env)
 {
-	char	*ret;
+	char	**ret;
 
 	printf("str = %s\n", str);
-	ret = get_path(env, str);
-	printf("ret = %s\n", ret);
+	printf("ft_strlen(str) = %li\n", ft_strlen(str));
+	ret = ft_split((env[str_to_env_index(env, str)] + (ft_strlen(str) + 1)), '\0');
+	printf("ret = %s\n", *ret);
 	return (ret);
 }
 
@@ -35,7 +36,6 @@ char	*dquote_manager(char *str, char **env)
 {
 	int		i;
 	char	*first;
-	char	*first1;
 	char	*ret;
 	char	*second;
 
@@ -48,10 +48,9 @@ char	*dquote_manager(char *str, char **env)
 			break ;
 		i++;
 	}
-	first1 = (ft_substr(str, 1, i - 1));
-	printf("str = %s\n", str);
-	if (ft_strchr(first1, '$'))
-		first = expand(first1, env);
+	first = (ft_substr(str, 1, i - 1));
+	if (ft_strchr(first, '$'))
+		first = *expand((first + 1), env);
 	str += i + 1;
 	while (!ft_isspace(str[i]))
 		i++;

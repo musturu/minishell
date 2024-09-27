@@ -84,6 +84,7 @@ char	is_string(TokenType type);
 char	is_after_break(t_list *tokens);
 
 /*execute*/
+int	str_to_env_index(char **env, char *name);
 int     execute(t_list **parsed_list, char **env);
 char	*get_path(char **env, char *command);
 

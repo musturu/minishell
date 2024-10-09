@@ -53,26 +53,23 @@ char	*expand(char *str, char **env)
 	int		i;
 
 	i = 0;
-	ret = ft_strdupdb(str);
+	if (ft_strchr(str, '"'))
+		ret = ft_strdupdb(str);
 	while (ret[i])
 	{
-		if (ret[i] == '$')
+		if (ret[i] == '$' || ret[i] == ' ')
 		{
 			first = ft_substr(ret, 0, i);
 			printf("first = %s\n", first);
-			next = ft_substr(ret, i, ft_strlen(ret));
-			printf("next = %s\n", next);
-			first = ft_strdup((env[str_to_env_index(env, first)] + (ft_strlen(first) + 1)));
-			printf("first = %s\n", first);
-			ret = ft_strjoin(first, next);
-			printf("ret = %s\n", ret);
 			break;
 		}
 		i++;
 	}
-	if (ft_strchr(ret, '$'))
-		expand(ret, env);
-	ret = ft_strdup((env[str_to_env_index(env, ret)] + (ft_strlen(ret) + 1)));
+	first = ft_strdup((env[str_to_env_index(env, first)] + (ft_strlen(first) + 1)));
+	printf("first = %s\n", first);
+	next = ft_substr(ret, i, ft_strlen(ret));
+	printf("next = %s\n", next);
+	ret = ft_strjoin(first, next);
 	printf("ret = %s\n", ret);
 	return (ret);
 }
@@ -99,6 +96,9 @@ char	*dquote_manager(char *str, char **env)
 	if (ft_strchr(str, '$'))
 	{
 		second = expand((ft_strchr(str, '$') + 1), env);
+		printf("second = %s\n", second);
+		while (ft_strchr(second, '$'))
+			second = expand((ft_strchr(second, '$') + 1), env);
 	}
 	while (!ft_isspace(str[i]))
 		i++;
